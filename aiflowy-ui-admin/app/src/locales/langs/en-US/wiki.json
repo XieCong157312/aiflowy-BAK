@@ -1,0 +1,44 @@
+{
+  "detail": "Detail",
+  "title": "Title",
+  "category": "Category",
+  "description": "Description",
+  "placeholder": {
+    "title": "Please enter title",
+    "category": "Please select category",
+    "description": "Please enter description"
+  },
+  "directory": {
+    "structure": "Directory Structure",
+    "add": "Directory",
+    "addRoot": "Add Root Directory",
+    "addChild": "Add Child Directory",
+    "edit": "Edit Directory",
+    "name": "Directory Name",
+    "placeholder": "Please enter directory name"
+  },
+  "document": {
+    "all": "All Documents",
+    "add": "Add Document",
+    "title": "Document Title",
+    "placeholder": "Please enter document title",
+    "content": "Content",
+    "view": "View",
+    "viewContent": "View Content",
+    "createTime": "Create Time"
+  },
+  "recognition": {
+    "mode": "Recognition Mode",
+    "normal": "Normal Mode",
+    "ocr": "OCR Mode",
+    "placeholder": "Please select recognition mode"
+  },
+  "taskStatus": "Task Status",
+  "upload": {
+    "file": "Upload File",
+    "tip": "Click or drag file here to upload",
+    "format": "Supports PDF, Word, TXT and other formats"
+  },
+  "ocrModel": "OCR Model",
+  "ocrModelPlaceholder": "Please select OCR model"
+}

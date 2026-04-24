@@ -1,0 +1,44 @@
+{
+  "detail": "详情",
+  "title": "标题",
+  "category": "分类",
+  "description": "描述",
+  "placeholder": {
+    "title": "请输入标题",
+    "category": "请选择分类",
+    "description": "请输入描述"
+  },
+  "directory": {
+    "structure": "目录结构",
+    "add": "目录",
+    "addRoot": "添加根目录",
+    "addChild": "添加子目录",
+    "edit": "编辑目录",
+    "name": "目录名称",
+    "placeholder": "请输入目录名称"
+  },
+  "document": {
+    "all": "全部文档",
+    "add": "添加文档",
+    "title": "文档标题",
+    "placeholder": "请输入文档标题",
+    "content": "内容",
+    "view": "查看",
+    "viewContent": "查看内容",
+    "createTime": "创建时间"
+  },
+  "recognition": {
+    "mode": "识别模式",
+    "normal": "普通模式",
+    "ocr": "OCR模式",
+    "placeholder": "请选择识别模式"
+  },
+  "taskStatus": "任务状态",
+  "upload": {
+    "file": "上传文件",
+    "tip": "点击或拖拽文件到此处上传",
+    "format": "支持 PDF、Word、TXT 等格式"
+  },
+  "ocrModel": "OCR模型",
+  "ocrModelPlaceholder": "请选择OCR模型"
+}

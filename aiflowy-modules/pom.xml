@@ -18,6 +18,7 @@
         <module>aiflowy-module-ai</module>
         <module>aiflowy-module-job</module>
         <module>aiflowy-module-datacenter</module>
+        <module>aiflowy-module-wiki</module>
     </modules>
 
 </project>

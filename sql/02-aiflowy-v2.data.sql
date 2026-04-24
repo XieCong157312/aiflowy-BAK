@@ -271,3 +271,34 @@ INSERT INTO `tb_mcp` (`id`, `title`, `description`, `config_json`, `dept_id`, `t
         }
     }
 }', 1, 1000000, '2026-01-06 09:56:44', 1, '2026-01-06 09:56:44', 1, 0);
+
+-- since v2.1.2
+INSERT INTO `tb_sys_menu` (`id`, `parent_id`, `menu_type`, `menu_title`, `menu_url`, `component`, `menu_icon`,
+                           `is_show`, `permission_tag`, `sort_no`, `created`, `created_by`, `modified`, `modified_by`,
+                           `remark`)
+VALUES (404439821679489024, 0, 0, 'Wiki', '/wiki', '/wiki/WikiList', 'svg:log', 1, '', 2, '2026-04-22 14:00:28', 1,
+        '2026-04-22 14:00:28', 1, '');
+INSERT INTO `tb_sys_menu` (`id`, `parent_id`, `menu_type`, `menu_title`, `menu_url`, `component`, `menu_icon`,
+                           `is_show`, `permission_tag`, `sort_no`, `created`, `created_by`, `modified`, `modified_by`,
+                           `remark`)
+VALUES (404440412006805504, 404439821679489024, 1, 'wiki-查询', '', '', '', 0, '/api/v1/wiki/query', 0,
+        '2026-04-22 14:02:48', 1, '2026-04-22 14:02:48', 1, '');
+INSERT INTO `tb_sys_menu` (`id`, `parent_id`, `menu_type`, `menu_title`, `menu_url`, `component`, `menu_icon`,
+                           `is_show`, `permission_tag`, `sort_no`, `created`, `created_by`, `modified`, `modified_by`,
+                           `remark`)
+VALUES (404440611320131584, 404439821679489024, 1, 'wiki-保存', '', '', '', 0, '/api/v1/wiki/save', 0,
+        '2026-04-22 14:03:36', 1, '2026-04-22 14:03:36', 1, '');
+INSERT INTO `tb_sys_menu` (`id`, `parent_id`, `menu_type`, `menu_title`, `menu_url`, `component`, `menu_icon`,
+                           `is_show`, `permission_tag`, `sort_no`, `created`, `created_by`, `modified`, `modified_by`,
+                           `remark`)
+VALUES (404440742773813248, 404439821679489024, 1, 'wiki-删除', '', '', '', 0, '/api/v1/wiki/remove', 0,
+        '2026-04-22 14:04:07', 1, '2026-04-22 14:04:23', 1, '');
+
+INSERT INTO `tb_sys_role_menu` (`id`, `role_id`, `menu_id`)
+VALUES (404439821780152320, 1, 404439821679489024);
+INSERT INTO `tb_sys_role_menu` (`id`, `role_id`, `menu_id`)
+VALUES (404440412094885888, 1, 404440412006805504);
+INSERT INTO `tb_sys_role_menu` (`id`, `role_id`, `menu_id`)
+VALUES (404440611412406272, 1, 404440611320131584);
+INSERT INTO `tb_sys_role_menu` (`id`, `role_id`, `menu_id`)
+VALUES (404440742861893632, 1, 404440742773813248);

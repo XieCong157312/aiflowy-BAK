@@ -12,6 +12,7 @@ import com.agentsflex.core.model.chat.ChatOptions;
 import com.agentsflex.core.model.chat.StreamResponseListener;
 import com.agentsflex.core.model.chat.tool.Tool;
 import com.agentsflex.core.prompt.MemoryPrompt;
+import com.agentsflex.wiki.WikiTool;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import org.slf4j.Logger;
@@ -41,8 +42,12 @@ import tech.aiflowy.common.util.UrlEncoderUtil;
 import tech.aiflowy.common.web.exceptions.BusinessException;
 import tech.aiflowy.core.chat.protocol.sse.ChatSseEmitter;
 import tech.aiflowy.core.chat.protocol.sse.ChatSseUtil;
+import tech.aiflowy.wiki.agentsflex.AIFlowyWikiProvider;
+import tech.aiflowy.wiki.entity.BotWiki;
+import tech.aiflowy.wiki.entity.Wiki;
+import tech.aiflowy.wiki.service.BotWikiService;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -106,6 +111,10 @@ public class BotServiceImpl extends ServiceImpl<BotMapper, Bot> implements BotSe
     private McpService mcpService;
     @Resource(name = "default")
     FileStorageService storageService;
+    @Resource
+    private BotWikiService botWikiService;
+    @Resource
+    private AIFlowyWikiProvider aiFlowyWikiProvider;
 
     @Override
     public Bot getDetail(String id) {
@@ -373,6 +382,28 @@ public class BotServiceImpl extends ServiceImpl<BotMapper, Bot> implements BotSe
             Tool tool = mcpService.toFunction(botMcp);
             functionList.add(tool);
         });
+
+        // Wiki
+        queryWrapper = QueryWrapper.create();
+        queryWrapper.eq(BotWiki::getBotId, botId);
+        List<BotWiki> botWikis = botWikiService.getMapper().selectListWithRelationsByQuery(queryWrapper);
+        if (botWikis != null && !botWikis.isEmpty()) {
+            List<com.agentsflex.wiki.Wiki> afWikiList = new ArrayList<>();
+            for (BotWiki botWiki : botWikis) {
+                Wiki wiki = botWiki.getWiki();
+                com.agentsflex.wiki.Wiki afWiki = new com.agentsflex.wiki.Wiki();
+                afWiki.setPath(wiki.getId().toString());
+                afWiki.setTitle(wiki.getTitle());
+                afWiki.setSummary(wiki.getDescription());
+                // afWiki.setContent(wiki.getContent());
+                afWikiList.add(afWiki);
+            }
+            Tool wikiTool = WikiTool.builder()
+                    .wikiProvider(aiFlowyWikiProvider)
+                    .addWikis(afWikiList)
+                    .build();
+            functionList.add(wikiTool);
+        }
 
         return functionList;
     }

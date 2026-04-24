@@ -43,5 +43,6 @@
   "regenerate": "Regenerate",
   "hide": "Hide",
   "more": "Mode",
-  "viewSegmentation": "ViewSegmentation"
+  "viewSegmentation": "ViewSegmentation",
+  "close": "Close"
 }

@@ -36,6 +36,7 @@ import ProblemPresupposition from '#/components/chat/ProblemPresupposition.vue';
 import PublishWxOfficalAccount from '#/components/chat/PublishWxOfficalAccount.vue';
 import CollapseViewItem from '#/components/collapseViewItem/CollapseViewItem.vue';
 import CommonSelectDataModal from '#/components/commonSelectModal/CommonSelectDataModal.vue';
+import WikiSelectModal from '#/components/wikiSelectModal/WikiSelectModal.vue';
 
 interface SelectedMcpTool {
   name: string;
@@ -172,6 +173,7 @@ onMounted(async () => {
   getAiBotMcpToolList();
   getBotDetail();
   getLlmListData();
+  getAiBotWikiList();
 });
 
 const handleLlmChange = async (value: string) => {
@@ -443,6 +445,66 @@ const formatSelectedMcpData = () => {
 
   return formattedData;
 };
+// Wiki - start
+const wikiData = ref<any[]>([]);
+const wikiIdsData = ref<any[]>([]);
+const wikiDataRef = ref();
+// 获取 Bot 绑定的 Wiki 列表
+const getAiBotWikiList = async () => {
+  api
+    .get('/api/v1/botWiki/list', {
+      params: {
+        botId: botId.value,
+      },
+    })
+    .then((res) => {
+      wikiData.value = res.data.map((item: any) => {
+        return {
+          recordId: item.id,
+          ...item.wiki,
+        };
+      });
+      wikiIdsData.value = res.data.map((item: any) => item.wikiId);
+    });
+};
+
+// 删除 Wiki 绑定
+const deleteWiki = (item: any) => {
+  api
+    .post('/api/v1/botWiki/remove', {
+      id: item.recordId,
+    })
+    .then((res) => {
+      if (res.errorCode === 0) {
+        ElMessage.success($t('message.deleteOkMessage'));
+        getAiBotWikiList();
+      } else {
+        ElMessage.error(res.message);
+      }
+    });
+};
+
+// 更新 Bot Wiki 绑定
+const confirmUpdateAiBotWiki = (data: any) => {
+  api
+    .post('/api/v1/botWiki/updateBotWikiIds', {
+      botId: botId.value,
+      wikiIds: data,
+    })
+    .then((res) => {
+      if (res.errorCode === 0) {
+        ElMessage.success($t('message.updateOkMessage'));
+        getAiBotWikiList();
+      } else {
+        ElMessage.error(res.message);
+      }
+    });
+};
+
+const handleAddWiki = () => {
+  wikiDataRef.value.openDialog(wikiIdsData.value);
+};
+// Wiki - end
 </script>
 
 <template>
@@ -709,6 +771,29 @@ const formatSelectedMcpData = () => {
               @delete="deleteBotMcpTool"
             />
           </ElCollapseItem>
+          <ElCollapseItem title="Wiki">
+                      <template #title>
+                        <div class="flex items-center justify-between pr-2">
+                          <span>Wiki</span>
+                          <div class="collapse-right-container">
+                            <span class="badge-circle">
+                              {{ wikiData.length }}
+                            </span>
+                            <span @click="handleAddWiki()">
+                              <ElIcon>
+                                <Plus />
+                              </ElIcon>
+                            </span>
+                          </div>
+                        </div>
+                      </template>
+                      <CollapseViewItem
+                        :data="wikiData"
+                        title-key="title"
+                        description-key="description"
+                        @delete="deleteWiki"
+                      />
+                    </ElCollapseItem>
         </ElCollapse>
       </div>
     </div>
@@ -874,6 +959,14 @@ const formatSelectedMcpData = () => {
       :is-select-mcp="true"
       @get-data="confirmUpdateAiBotMcp"
     />
+
+    <!-- 选择 Wiki -->
+        <WikiSelectModal
+          title="Wiki"
+          width="500"
+          ref="wikiDataRef"
+          @get-data="confirmUpdateAiBotWiki"
+        />
 
     <!--预设问题-->
     <ProblemPresupposition
