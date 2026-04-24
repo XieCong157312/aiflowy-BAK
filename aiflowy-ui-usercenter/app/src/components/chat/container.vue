@@ -27,9 +27,9 @@ import { $t } from '#/locales';
 
 interface Props {
   bot: any;
-  isFold: boolean;
+  isFold?: boolean;
   onMessageList?: (list: any[]) => void;
-  toggleFold: () => void;
+  toggleFold?: () => void;
 }
 const props = defineProps<Props>();
 const sessionList = ref<any>([]);
