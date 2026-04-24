@@ -25,6 +25,8 @@ import tech.aiflowy.common.web.exceptions.BusinessException;
 import tech.aiflowy.common.web.jsonbody.JsonBody;
 import tech.aiflowy.core.chat.protocol.sse.ChatSseEmitter;
 import tech.aiflowy.core.chat.protocol.sse.ChatSseUtil;
+import tech.aiflowy.wiki.entity.BotWiki;
+import tech.aiflowy.wiki.service.BotWikiService;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
@@ -58,6 +60,8 @@ public class BotController extends BaseCurdController<BotService, Bot> {
     private BotMessageService botMessageService;
     @Resource
     private BotMcpService botMcpService;
+    @Resource
+    private BotWikiService botWikiService;
 
     public BotController(BotService service, ModelService modelService, BotWorkflowService botWorkflowService,
                          BotDocumentCollectionService botDocumentCollectionService, BotMessageService botMessageService) {
@@ -297,6 +301,8 @@ public class BotController extends BaseCurdController<BotService, Bot> {
         botMessageService.remove(QueryWrapper.create().in(BotMessage::getBotId, ids));
         // 删除bot对应mcp
         botMcpService.remove(QueryWrapper.create().in(BotMcp::getBotId, ids));
+        // 删除bot对应wiki
+        botWikiService.remove(QueryWrapper.create().in(BotWiki::getBotId, ids));
         return super.onRemoveBefore(ids);
     }
 

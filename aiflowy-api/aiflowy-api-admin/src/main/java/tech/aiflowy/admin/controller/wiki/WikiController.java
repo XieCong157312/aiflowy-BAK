@@ -19,7 +19,9 @@ import tech.aiflowy.common.filestorage.FileStorageService;
 import tech.aiflowy.common.tree.Tree;
 import tech.aiflowy.common.web.controller.BaseCurdController;
 import tech.aiflowy.common.web.exceptions.BusinessException;
+import tech.aiflowy.wiki.entity.BotWiki;
 import tech.aiflowy.wiki.entity.Wiki;
+import tech.aiflowy.wiki.service.BotWikiService;
 import tech.aiflowy.wiki.service.WikiService;
 
 import java.io.IOException;
@@ -36,6 +38,8 @@ public class WikiController extends BaseCurdController<WikiService, Wiki> {
     private FileStorageService storageService;
     @Resource
     private ModelService modelService;
+    @Resource
+    private BotWikiService botWikiService;
 
     public WikiController(WikiService service) {
         super(service);
@@ -91,6 +95,9 @@ public class WikiController extends BaseCurdController<WikiService, Wiki> {
             }
         }
 
+        QueryWrapper queryWrapper = QueryWrapper.create();
+        queryWrapper.in(BotWiki::getWikiId, ids);
+        botWikiService.remove(queryWrapper);
         return super.onRemoveBefore(ids);
     }
 }
