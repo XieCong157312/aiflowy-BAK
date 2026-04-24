@@ -29,10 +29,8 @@ import tech.aiflowy.core.chat.protocol.sse.ChatSseUtil;
 import javax.annotation.Resource;
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 控制层。
@@ -47,7 +45,6 @@ public class BotController extends BaseCurdController<BotService, Bot> {
     private final ModelService modelService;
     private final BotWorkflowService botWorkflowService;
     private final BotDocumentCollectionService botDocumentCollectionService;
-    private final BotMessageService botMessageService;
     @Resource
     private BotService botService;
     @Autowired
@@ -55,6 +52,12 @@ public class BotController extends BaseCurdController<BotService, Bot> {
     private Cache<String, Object> cache;
     @Resource
     private AudioServiceManager audioServiceManager;
+    @Resource
+    private BotRecentlyUsedService botRecentlyUsedService;
+    @Resource
+    private BotMessageService botMessageService;
+    @Resource
+    private BotMcpService botMcpService;
 
     public BotController(BotService service, ModelService modelService, BotWorkflowService botWorkflowService,
                          BotDocumentCollectionService botDocumentCollectionService, BotMessageService botMessageService) {
@@ -286,6 +289,14 @@ public class BotController extends BaseCurdController<BotService, Bot> {
         botWorkflowService.remove(queryWrapperBotWorkflow);
         QueryWrapper queryWrapperBotPlugins = QueryWrapper.create().in(BotPlugin::getBotId, ids);
         botPluginService.remove(queryWrapperBotPlugins);
+        botRecentlyUsedService.removeRecentlyAllUsed(ids.stream()
+                .filter(Objects::nonNull)
+                .map(id -> new BigInteger(String.valueOf(id)))
+                .collect(Collectors.toList()));
+        // 删除bot对应的所有用户的消息
+        botMessageService.remove(QueryWrapper.create().in(BotMessage::getBotId, ids));
+        // 删除bot对应mcp
+        botMcpService.remove(QueryWrapper.create().in(BotMcp::getBotId, ids));
         return super.onRemoveBefore(ids);
     }
 

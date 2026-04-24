@@ -11,6 +11,7 @@ import dev.tinyflow.core.parser.ChainParser;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import tech.aiflowy.ai.entity.BotWorkflow;
 import tech.aiflowy.ai.entity.Workflow;
 import tech.aiflowy.ai.service.BotWorkflowService;
 import tech.aiflowy.ai.service.ModelService;
@@ -201,13 +202,10 @@ public class WorkflowController extends BaseCurdController<WorkflowService, Work
     }
 
     @Override
-    protected Result onRemoveBefore(Collection<Serializable> ids) {
+    protected Result<?> onRemoveBefore(Collection<Serializable> ids) {
         QueryWrapper queryWrapper = QueryWrapper.create();
-        queryWrapper.in("workflow_id", ids);
-        boolean exists = botWorkflowService.exists(queryWrapper);
-        if (exists) {
-            return Result.fail(1, "此工作流还关联有bot，请先取消关联后再删除！");
-        }
+        queryWrapper.in(BotWorkflow::getWorkflowId, ids);
+        botWorkflowService.remove(queryWrapper);
         return null;
     }
 }

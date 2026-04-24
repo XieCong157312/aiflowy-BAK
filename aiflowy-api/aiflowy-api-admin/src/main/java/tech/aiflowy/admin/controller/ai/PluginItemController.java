@@ -139,12 +139,7 @@ public class PluginItemController extends BaseCurdController<PluginItemService, 
 
         QueryWrapper queryWrapper = QueryWrapper.create();
         queryWrapper.in(BotPlugin::getPluginItemId, ids);
-
-        boolean exists = botPluginService.exists(queryWrapper);
-        if (exists){
-            return Result.fail(1, "此工具还关联着bot，请先取消关联！");
-        }
-
+        botPluginService.remove(queryWrapper);
         return null;
     }
 }

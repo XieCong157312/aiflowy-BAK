@@ -39,18 +39,12 @@ import static tech.aiflowy.ai.entity.DocumentCollection.KEY_SEARCHER_WEIGHT;
 @RequestMapping("/api/v1/documentCollection")
 public class DocumentCollectionController extends BaseCurdController<DocumentCollectionService, DocumentCollection> {
 
-    private final DocumentChunkService chunkService;
-    private final ModelService llmService;
-    @Resource
-    private DocumentCollectionService documentCollectionService;
 
     @Resource
     private BotDocumentCollectionService botDocumentCollectionService;
 
-    public DocumentCollectionController(DocumentCollectionService service, DocumentChunkService chunkService, ModelService llmService) {
+    public DocumentCollectionController(DocumentCollectionService service) {
         super(service);
-        this.chunkService = chunkService;
-        this.llmService = llmService;
     }
 
     @Override
@@ -100,15 +94,10 @@ public class DocumentCollectionController extends BaseCurdController<DocumentCol
     protected Result<Void> onRemoveBefore(Collection<Serializable> ids) {
 
         QueryWrapper queryWrapper = QueryWrapper.create();
-        queryWrapper.in(BotDocumentCollection::getId, ids);
-
-        boolean exists = botDocumentCollectionService.exists(queryWrapper);
-        if (exists){
-            throw new BusinessException("此知识库还关联着bot，请先取消关联！");
-        }
-
-        documentCollectionService.beforeRemove(ids);
-
+        queryWrapper.in(BotDocumentCollection::getDocumentCollectionId, ids);
+        // 删除该知识库对应额bot关联表数据
+        botDocumentCollectionService.remove(queryWrapper);
+        service.beforeRemove(ids);
         return null;
     }
 

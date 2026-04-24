@@ -60,7 +60,9 @@ public class PluginServiceImpl extends ServiceImpl<PluginMapper, Plugin> impleme
     @Override
     @Transactional
     public boolean removePlugin(String id) {
-
+        if (id == null) {
+            throw new BusinessException("id不能未空");
+        }
         List<PluginItem> pluginItems = pluginItemService.getByPluginId(id);
         List<BigInteger> pluginToolIds = new ArrayList<>();
 
@@ -69,28 +71,14 @@ public class PluginServiceImpl extends ServiceImpl<PluginMapper, Plugin> impleme
             pluginToolIds = pluginItems.stream().map(PluginItem::getId).collect(Collectors.toList());
             QueryWrapper queryWrapper = QueryWrapper.create();
             queryWrapper.in(BotPlugin::getPluginItemId, pluginToolIds);
-            boolean exists = botPluginService.exists(queryWrapper);
-
-            if (exists){
-                throw new BusinessException("插件中有工具还关联着bot，请先取消关联！");
-            }
-
+            botPluginService.remove(queryWrapper);
         }
 
         if ( !pluginToolIds.isEmpty()) {
-           boolean result =  pluginItemService.removeByIds(pluginToolIds);
-           if (!result){
-               log.error("删除插件工具表结果为0");
-               throw new BusinessException("删除失败，请稍后重试！");
-           }
+            pluginItemService.removeByIds(pluginToolIds);
         }
 
-
-        int remove = pluginMapper.deleteById(id);
-        if (remove <= 0) {
-            log.error("删除插件结果为0");
-            throw new BusinessException("删除失败，请稍后重试！");
-        }
+        pluginMapper.deleteById(id);
 
         return true;
 
