@@ -1168,7 +1168,7 @@ CREATE TABLE `tb_vector_database`
 CREATE TABLE `tb_wiki`
 (
     `id`               bigint unsigned NOT NULL COMMENT '主键ID',
-    `parent_id`        bigint NOT NULL COMMENT '父ID',
+    `parent_id`        bigint unsigned NOT NULL COMMENT '父ID',
     `category_id`      bigint unsigned DEFAULT NULL COMMENT '分类ID',
     `type`             int    NOT NULL COMMENT '类型1目录2正文',
     `file_url`         varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '原文件地址',

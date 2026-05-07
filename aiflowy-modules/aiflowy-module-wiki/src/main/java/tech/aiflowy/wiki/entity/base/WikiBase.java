@@ -25,7 +25,7 @@ public class WikiBase extends DateTreeEntity implements Serializable {
      * 父ID
      */
     @Column(comment = "父ID")
-    private Long parentId;
+    private BigInteger parentId;
 
     /**
      * 分类ID
@@ -149,11 +149,11 @@ public class WikiBase extends DateTreeEntity implements Serializable {
         this.id = id;
     }
 
-    public Long getParentId() {
+    public BigInteger getParentId() {
         return parentId;
     }
 
-    public void setParentId(Long parentId) {
+    public void setParentId(BigInteger parentId) {
         this.parentId = parentId;
     }
 
