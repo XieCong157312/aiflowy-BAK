@@ -36,12 +36,4 @@ public class UploadController {
         return Result.ok(resVo);
     }
 
-    @PostMapping(value = "/uploadPrePath",produces = MediaType.APPLICATION_JSON_VALUE)
-    @SaIgnore
-    public Result<UploadResVo> uploadPrePath(MultipartFile file, String prePath) {
-        String path = storageService.save(file,prePath);
-        UploadResVo resVo = new UploadResVo();
-        resVo.setPath(path);
-        return Result.ok(resVo);
-    }
 }

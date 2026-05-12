@@ -27,6 +27,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.math.BigInteger;
 import java.util.*;
+import java.util.function.Consumer;
 
 public class BaseCurdController<S extends IService<M>, M> extends BaseController {
 
@@ -216,7 +217,7 @@ public class BaseCurdController<S extends IService<M>, M> extends BaseController
                                 queryWrapper.eq(columnName, value);
                             } else {
                                 if (isQueryOrBool) {
-                                    queryWrapper.or(columnName + " like " + "'%" + value + "%' ");
+                                    queryWrapper.or((Consumer<QueryWrapper>) wrapper -> wrapper.like(columnName, value));
                                 } else {
                                     queryWrapper.like(columnName, value);
                                 }
