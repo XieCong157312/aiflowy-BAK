@@ -32,6 +32,10 @@ export default defineConfig({
             level: "deep",
         },
 
+        search: {
+            provider: "local",
+        },
+
         editLink: {
             text: "编辑当前页面",
             pattern: "https://gitee.com/aiflowy/aiflowy/edit/main/docs/:path",

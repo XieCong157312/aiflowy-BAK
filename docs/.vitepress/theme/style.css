@@ -157,3 +157,23 @@
 .medium-zoom-image--opened{
     border: none;
 }
+
+header .content-body {
+    display: flex;
+}
+
+header .content-body .menu{
+    order: -1;
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+}
+
+header .content-body .VPNavBarSearch{
+    flex-grow: 0;
+}
+
+header .content-body .search{
+    order: 0;
+
+}
