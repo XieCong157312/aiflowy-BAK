@@ -96,18 +96,19 @@ public class PluginServiceImpl extends ServiceImpl<PluginMapper, Plugin> impleme
         QueryWrapper queryWrapper = QueryWrapper.create().select(PluginCategoryMapping::getPluginId)
                 .eq(PluginCategoryMapping::getCategoryId, category);
         // 分页查询该分类中的插件
-        Page<BigInteger> pagePluginIds = pluginCategoryMappingMapper.paginateAs(new Page<>(pageNumber, pageSize), queryWrapper, BigInteger.class);
-        Page<PluginCategoryMapping> paginateCategories = pluginCategoryMappingMapper.paginate(pageNumber, pageSize, queryWrapper);
+        Page<BigInteger> pagePluginIds = pluginCategoryMappingMapper.paginateAs(
+                new Page<>(pageNumber, pageSize), queryWrapper, BigInteger.class);
+
         List<Plugin> plugins = Collections.emptyList();
-        if (paginateCategories.getRecords().isEmpty()) {
-            return Result.ok(new Page<>(plugins, pageNumber, pageSize, paginateCategories.getTotalRow()));
+        if (pagePluginIds.getRecords().isEmpty()) {
+            return Result.ok(new Page<>(plugins, pageNumber, pageSize, pagePluginIds.getTotalRow()));
         }
         List<BigInteger> pluginIds = pagePluginIds.getRecords();
         // 查询对应的插件信息
         QueryWrapper queryPluginWrapper = QueryWrapper.create().select()
                 .in(Plugin::getId, pluginIds);
         plugins = pluginMapper.selectListByQuery(queryPluginWrapper);
-        Page<Plugin> aiPluginPage = new Page<>(plugins, pageNumber, pageSize, paginateCategories.getTotalRow());
+        Page<Plugin> aiPluginPage = new Page<>(plugins, pageNumber, pageSize, pagePluginIds.getTotalRow());
         return Result.ok(aiPluginPage);
     }
 
