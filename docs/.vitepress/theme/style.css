@@ -177,3 +177,8 @@ header .content-body .search{
     order: 0;
 
 }
+
+._zh_development_websdk_websdk img{
+    border: 1px solid var(--vp-c-gray-3);
+    border-radius: 4px;
+}

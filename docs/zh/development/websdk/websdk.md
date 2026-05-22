@@ -4,6 +4,9 @@
 
 AIFlowy WebSDK 是一个轻量级的 JavaScript SDK，允许您在任何网站中快速嵌入 AI 对话组件。通过简单的配置，即可为您的网站添加 AI 助手能力。
 
+![](websdk.png)
+
+
 ## 安装
 
 ### 方式一：通过 npm 安装
