@@ -32,12 +32,16 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://gitee.com/aiflowy/aiflowy.git",
+    "url": "https://github.com/aiflowy/aiflowy.git",
     "directory": "aiflowy-ui-websdk"
   },
-  "homepage": "https://gitee.com/aiflowy/aiflowy/tree/main/aiflowy-ui-websdk",
+  "homepage": "https://github.com/aiflowy/aiflowy/tree/main/aiflowy-ui-websdk",
   "bugs": {
-    "url": "https://gitee.com/aiflowy/aiflowy/issues"
+    "url": "https://github.com/aiflowy/aiflowy/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
     "dev": "vite",
@@ -53,6 +57,5 @@
   },
   "engines": {
     "node": ">=16.0.0"
-  },
-  "packageManager": "pnpm@11.1.2"
+  }
 }
