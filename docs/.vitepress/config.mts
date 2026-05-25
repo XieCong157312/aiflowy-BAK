@@ -231,6 +231,7 @@ function sidebarProduct(): DefaultTheme.SidebarItem[] {
                         //   link: "bot-application/bot-api-key",
                         // },
                         {text: "聊天助手接入微信公众号", link: "bot-application/wechat-mp"},
+                        {text: "Bot 集成与嵌入", link: "bot-application/bot-integration"},
                     ],
                 },
                 {
