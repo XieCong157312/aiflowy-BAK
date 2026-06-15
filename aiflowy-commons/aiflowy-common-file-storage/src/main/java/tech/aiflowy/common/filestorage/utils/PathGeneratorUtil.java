@@ -3,6 +3,7 @@ package tech.aiflowy.common.filestorage.utils;
 import cn.dev33.satoken.stp.StpUtil;
 import tech.aiflowy.common.util.StringUtil;
 
+import java.text.Normalizer;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
@@ -13,7 +14,7 @@ import java.util.UUID;
 public class PathGeneratorUtil {
 
     public static String generateUserPath(String fileName) {
-        return "/" + getAccountLoginIdOrCommons() +  PathGeneratorUtil.generatePath(fileName);
+        return "/" + getAccountLoginIdOrCommons() + PathGeneratorUtil.generatePath(fileName);
     }
 
     private static String getAccountLoginIdOrCommons() {
@@ -68,13 +69,25 @@ public class PathGeneratorUtil {
      * 提取纯文件名（避免文件名包含路径分隔符）
      */
     public static String getPureFileName(String fileName) {
-        if (fileName == null) {
+        if (fileName == null || fileName.isBlank()) {
             return "";
         }
-        // 处理 Windows（\）和 Linux（/）的路径分隔符
-        int lastBackslash = fileName.lastIndexOf("\\");
-        int lastSlash = fileName.lastIndexOf("/");
-        int lastSeparator = Math.max(lastBackslash, lastSlash);
-        return lastSeparator == -1 ? fileName : fileName.substring(lastSeparator + 1);
+
+        // Unicode 规范化
+        fileName = Normalizer.normalize(fileName, Normalizer.Form.NFKC);
+
+        // 提取文件名
+        int lastSeparator = Math.max(
+                fileName.lastIndexOf('/'),
+                fileName.lastIndexOf('\\')
+        );
+        if (lastSeparator >= 0) {
+            fileName = fileName.substring(lastSeparator + 1);
+        }
+
+        // 仅保留：中文、英文、数字、点、下划线、短横线
+        fileName = fileName.replaceAll("[^\\p{IsHan}\\p{Alnum}._-]", "");
+
+        return fileName;
     }
 }
